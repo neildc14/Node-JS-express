@@ -25,24 +25,7 @@ app.use(morgan("dev"));
 app.use(express.static("styles"));
 
 app.get("/", function (req, res) {
-  const blogs = [
-    {
-      title: "Yoshi find segss",
-      snippet:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, perferendis.",
-    },
-    {
-      title: "Mario fin stars",
-      snippet:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, perferendis.",
-    },
-    {
-      title: "How to defeat bowser",
-      snippet:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, perferendis.",
-    },
-  ];
-  res.render("index", { title: "Home", blogs });
+  res.redirect("/blogs");
 });
 
 app.get("/about", function (req, res) {
@@ -53,34 +36,17 @@ app.get("/blogs/create", (req, res) => {
   res.render("create", { title: "Create a new blog" });
 });
 
-//sandbox
-app.get("/add-blog", (req, res) => {
-  const blog = new Blog({
-    title: "New Blossg",
-    snippet: "snippet of blog",
-    body: "body of the blog",
-  });
-
-  blog
-    .save()
+app.get("/blogs", (req, res) => {
+  Blog.find()
+    .sort({ createdAt: -1 })
     .then((result) => {
-      res.send(result);
+      const blogs = result;
+      res.render("index", { title: "All Blogs", blogs });
     })
     .catch((err) => {
       console.log(err);
     });
 });
-
-app.get("/all-blogs", (req, res) => {
-  Blog.find() //find methods directly on the Blog not on the instance of it.
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => {
-      console.lopg(err);
-    });
-});
-
 //error 404 fires in every single request so it must be to the bottom
 app.use((req, res) => {
   res.status(404).render("404", { title: "404" });
