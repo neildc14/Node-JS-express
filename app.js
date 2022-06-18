@@ -21,9 +21,11 @@ mongoose
 app.set("view engine", "ejs");
 
 //middleware
-app.use(morgan("dev"));
 app.use(express.static("styles"));
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
 
+//GET REQUESTS-------------------//
 app.get("/", function (req, res) {
   res.redirect("/blogs");
 });
@@ -40,13 +42,28 @@ app.get("/blogs", (req, res) => {
   Blog.find()
     .sort({ createdAt: -1 })
     .then((result) => {
-      const blogs = result;
-      res.render("index", { title: "All Blogs", blogs });
+      // const blogs = result;
+      res.render("index", { title: "All Blogs", blogs: result });
     })
     .catch((err) => {
       console.log(err);
     });
 });
+
+//POST REQUESTS----------------------//
+app.post("/blogs", (req, res) => {
+  const blog = new Blog(req.body); //data contained by the post request
+
+  blog
+    .save()
+    .then((result) => {
+      res.redirect("/blogs");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 //error 404 fires in every single request so it must be to the bottom
 app.use((req, res) => {
   res.status(404).render("404", { title: "404" });

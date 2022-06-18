@@ -4,7 +4,7 @@ body {
   margin: 20px auto;
   padding: 0 20px;
   font-family: "Noto Serif", serif;
-  max-width: 1200px;
+  transition: all 0.5s ease;
 }
 p,
 h1,
