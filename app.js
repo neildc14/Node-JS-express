@@ -50,6 +50,7 @@ app.get("/blogs", (req, res) => {
     });
 });
 
+//route param
 app.get("/blogs/:id", (req, res) => {
   const id = req.params.id;
   Blog.findById(id)
@@ -71,6 +72,17 @@ app.post("/blogs", (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
+
+//DELETE--------------//
+app.delete("/blogs/:id", (req, res) => {
+  const id = req.params.id;
+  Blog.findByIdAndDelete(id)
+    .then((result) => {
+      res.json({ redirect: "/blogs  " });
+      //you cannot pass a redirect method in this
+    })
+    .catch((err) => console.log(err));
 });
 
 //error 404 fires in every single request so it must be to the bottom
