@@ -34,7 +34,7 @@ app.get("/about", function (req, res) {
   res.render("about", { title: "About" });
 });
 
-app.use(blogRoutes);
+app.use("/blogs", blogRoutes);
 
 //error 404 fires in every single request so it must be to the bottom
 app.use((req, res) => {
